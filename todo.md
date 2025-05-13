@@ -1,0 +1,96 @@
+# TODO: Create Detailed Feature Specification Document
+
+- [x] **1. Initialize Feature Specification Document (`feature_specifications.md`)**
+    - [x] Create the main `feature_specifications.md` file.
+    - [x] Add top-level headings: "## File System" and "## Feature Specifications".
+
+- [x] **2. Draft File System Section**
+    - [x] **2.1. Backend (FastAPI) File Structure**
+        - [x] Define a logical folder structure for the FastAPI backend (e.g., `/app`, `/app/api`, `/app/core`, `/app/models`, `/app/schemas`, `/app/services`, `/app/crud`, `/app/background_tasks`, `/app/tests`).
+        - [x] Outline key files and their purpose within each folder.
+    - [x] **2.2. Frontend (Next.js) File Structure**
+        - [x] Define a logical folder structure for the Next.js frontend (e.g., `/src/app` (for app router), `/src/components`, `/src/contexts` or `/src/store`, `/src/hooks`, `/src/lib`, `/src/services`, `/src/styles`, `/src/utils`, `/tests`).
+        - [x] Outline key files and their purpose within each folder.
+    - [x] Append the drafted File System section to `feature_specifications.md`.
+
+- [x] **3. Identify and List Core Features**
+    - [x] Review `requirements.md`, `refined_architecture_v2.md`, and `final_structure_v2.md`.
+    - [x] Compile a list of core features for the MVP. (e.g., User Authentication, TastyTrade Data Sync, Market Data Display, Dashboard, P&L Reporting, Strategy Identification, Tabbed Views).
+
+- [ ] **4. Draft Specifications for Each Core Feature**
+    - [x] **Feature 1: User Authentication**
+        - [x] Define Feature Goal (Secure user login, logout, session management).
+        - [x] Detail API Relationships (e.g., `/auth/login`, `/auth/logout`, `/auth/refresh_token` endpoints; request/response schemas).
+        - [x] List Detailed Feature Requirements (Password policies, JWT handling, token storage, route protection).
+        - [x] Provide Detailed Implementation Guide (Backend: FastAPI security utilities, password hashing, JWT creation/validation. Frontend: Login form, token storage, API calls, route guards).
+        - [x] Append to `feature_specifications.md`.    - [x] **Feature 2: TastyTrade API Integration & Data Synchronization**
+        - [x] Define Feature Goal (Reliable and secure synchronization of TastyTrade account data).
+        - [x] Detail API Relationships (Internal API endpoints to trigger/monitor sync; interaction with TastyTrade external API).
+        - [x] List Detailed Feature Requirements (Initial full sync, incremental sync, current positions sync, error handling, secure credential management for TastyTrade API, background task execution).
+        - [x] Provide Detailed Implementation Guide (Backend: Celery/ARQ task for sync logic, adapting `sync.py`, database interaction for storing/updating data, Supabase schema for transactions/positions. Frontend: UI to indicate sync status if applicable).
+        - [x] Append to `feature_specifications.md`.    - [x] **Feature 3: Market Data Integration & Display**
+        - [x] Define Feature Goal (Display up-to-date general market overview).
+        - [x] Detail API Relationships (Backend endpoint to serve market data; interaction with external market data API like marketstack.com).
+        - [x] List Detailed Feature Requirements (Fetch S&P, NASDAQ, Dow Jones, etc., caching of market data, display format).
+        - [x] Provide Detailed Implementation Guide (Backend: Service to call external API, caching logic. Frontend: Component to display market data on dashboard).
+        - [x] Append to `feature_specifications.md`.    - [x] **Feature 4: Dashboard**
+        - [x] Define Feature Goal (Provide an at-a-glance overview of market and user portfolio).
+        - [x] Detail API Relationships (Endpoints to fetch dashboard summary data: market overview, P&L, key metrics).
+        - [x] List Detailed Feature Requirements (Display market data, daily/MTD P&L, delta, theta, net liq, BP usage).
+        - [x] Provide Detailed Implementation Guide (Frontend: Dashboard layout, components for each data point, API calls. Backend: Aggregation logic for dashboard data).
+        - [x] Append to `feature_specifications.md`.    - [x] **Feature 5: P&L Calculation & Reporting**
+        - [x] Define Feature Goal (Accurate calculation and presentation of realized/unrealized P&L).
+        - [x] Detail API Relationships (Endpoints for fetching P&L data with various filters: day, MTD, YTD).
+        - [x] List Detailed Feature Requirements (Calculation logic for realized/unrealized P&L, data aggregation, filtering capabilities).
+        - [x] Provide Detailed Implementation Guide (Backend: Logic for P&L calculation based on transactions, database queries. Frontend: UI to display P&L figures, potentially charts).
+        - [x] Append to `feature_specifications.md`.    - [x] **Feature 6: Portfolio Metrics Calculation & Display**
+        - [x] Define Feature Goal (Calculate and display key portfolio risk metrics).
+        - [x] Detail API Relationships (Endpoints to fetch portfolio metrics).
+        - [x] List Detailed Feature Requirements (Calculate delta, delta percentage, theta, theta percentage, net liquidity, buying power usage. Note: Some of these might come directly from TastyTrade or require calculation).
+        - [x] Provide Detailed Implementation Guide (Backend: Logic to calculate or retrieve metrics. Frontend: Display components on dashboard/relevant views).
+        - [x] Append to `feature_specifications.md`.    - [x] **Feature 7: Strategy Identification & Management**
+        - [x] Define Feature Goal (Identify common trading strategies and allow user-defined strategies).
+        - [x] Detail API Relationships (Endpoints for strategy data, potentially for users to define custom strategies).
+        - [x] List Detailed Feature Requirements (Automatic identification of strangles, straddles, etc., allow users to name/tag trades with custom strategies, store strategy definitions).
+        - [x] Provide Detailed Implementation Guide (Backend: Logic to analyze positions for patterns, database schema for strategies. Frontend: UI for displaying/managing strategies).
+        - [x] Append to `feature_specifications.md`.    - [x] **Feature 8: Tabbed Views (Calendar, Underlying, Strategy, P&L by Delta)**
+        - [x] Define Feature Goal (Provide multiple perspectives on trading activity and performance).
+        - [x] Detail API Relationships (Separate endpoints for data required by each tab, with filtering options).
+        - [x] List Detailed Feature Requirements (Calendar: P&L per day. Underlying: P&L by asset. Strategy: P&L by strategy. P&L by Delta: P&L by risk level. All views filterable by day, MTD, YTD).
+        - [x] Provide Detailed Implementation Guide (Frontend: Tab navigation, components for each view, data fetching and display logic. Backend: Data aggregation and filtering logic for each view type).
+        - [x] Append to `feature_specifications.md`.
+    - [x] **Feature 9: Net Liquidity Tab**
+        - [x] Define Feature Goal (Provide a clear reconciliation of net liquidity changes).
+        - [x] Detail API Relationships (Endpoint to fetch net liquidity reconciliation data).
+        - [x] List Detailed Feature Requirements (Start with prior net liq, add/subtract realized P&L, fees, commissions, cash deposits/withdrawals, end with current net liq. Filterable by day, MTD, YTD).
+        - [x] Provide Detailed Implementation Guide (Backend: Logic to gather and calculate reconciliation components. Frontend: UI to display the reconciliation statement).
+        - [x] Append to `feature_specifications.md`.    - [ ] *(Add more features as identified, including future enhancements if they need to be part of this initial deep-dive specification)*
+
+- [ ] **5. Draft Specifications for Future Enhancements (as per `requirements.md`)**
+    - [ ] **Feature 10: Notifications (Last Call Summary)**
+        - [ ] Define Feature Goal.
+        - [ ] Detail API Relationships.
+        - [ ] List Detailed Feature Requirements.
+        - [ ] Provide Detailed Implementation Guide.
+        - [ ] Append to `feature_specifications.md`.
+    - [ ] **Feature 11: Graphical Position View**
+        - [ ] Define Feature Goal.
+        - [ ] Detail API Relationships.
+        - [ ] List Detailed Feature Requirements.
+        - [ ] Provide Detailed Implementation Guide.
+        - [ ] Append to `feature_specifications.md`.
+    - [ ] **Feature 12: P&L by Days-to-Expiration (DTE) View**
+        - [ ] Define Feature Goal.
+        - [ ] Detail API Relationships.
+        - [ ] List Detailed Feature Requirements.
+        - [ ] Provide Detailed Implementation Guide.
+        - [ ] Append to `feature_specifications.md`.
+- [ ] **6. Review and Consolidate**
+    - [ ] Review the entire `feature_specifications.md` for completeness, clarity, consistency, and adherence to the user's requested format.
+    - [ ] Ensure all aspects from `pasted_content.txt` (goal, API relationships, detailed requirements, detailed implementation guide) are covered for each feature.
+    - [ ] Check for any missing critical information or areas needing further clarification.
+
+- [ ] **7. Final Output Preparation**
+    - [ ] Ensure no actual code is written, only pseudocode where necessary for technical illustration.
+    - [ ] Prepare the final `feature_specifications.md` for delivery.
+
