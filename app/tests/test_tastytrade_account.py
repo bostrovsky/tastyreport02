@@ -325,18 +325,116 @@ async def test_tastytrade_pagination():
 # --- Edge Case: Unusual Symbols ---
 @pytest.mark.asyncio
 async def test_tastytrade_unusual_symbols():
-    """Test handling of positions/transactions with special characters in symbols."""
-    # This would require mocking the TastyTrade API or using a test account with such data
-    # Placeholder: pass for now
-    pass
+    """Test handling of positions/transactions with special characters in symbols using real data."""
+    load_dotenv()
+    tasty_username = os.getenv("TASTYTRADE_USERNAME")
+    tasty_password = os.getenv("TASTY_PASSWORD")
+    if not tasty_username or not tasty_password:
+        pytest.skip("TastyTrade credentials not set in .env")
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        email = unique_email("unusualsym")
+        # Register user
+        resp = await ac.post("/api/v1/auth/register-user", json={
+            "email": email,
+            "password": "UnusualSymTestPassword123!",
+            "role": "user"
+        })
+        assert resp.status_code == 201, resp.text
+        # Login
+        resp = await ac.post("/api/v1/auth/login", json={
+            "email": email,
+            "password": "UnusualSymTestPassword123!"
+        })
+        assert resp.status_code == 200, resp.text
+        tokens = resp.json()
+        headers = {"Authorization": f"Bearer {tokens['access_token']}"}
+        # Add TastyTrade account
+        resp = await ac.post("/api/v1/tastytrade/accounts/", json={
+            "tasty_username": tasty_username,
+            "tasty_password": tasty_password
+        }, headers=headers)
+        assert resp.status_code == 201, resp.text
+        account_id = resp.json()["id"]
+        # Sync
+        resp = await ac.post(f"/api/v1/tastytrade/accounts/sync/{account_id}", headers=headers)
+        assert resp.status_code == 202, resp.text
+        # Retrieve positions
+        resp = await ac.get(f"/api/v1/tastytrade/accounts/{account_id}/positions", headers=headers)
+        assert resp.status_code == 200, resp.text
+        positions = resp.json()
+        # Retrieve transactions
+        resp = await ac.get(f"/api/v1/tastytrade/accounts/{account_id}/transactions", headers=headers)
+        assert resp.status_code == 200, resp.text
+        transactions = resp.json()
+        # Find unusual symbols
+        import re
+        unusual_pattern = re.compile(r"[^A-Za-z0-9]")
+        unusual_symbols = set()
+        for pos in positions:
+            symbol = pos.get("symbol")
+            if symbol and unusual_pattern.search(symbol):
+                unusual_symbols.add(symbol)
+        for txn in transactions:
+            symbol = txn.get("symbol")
+            if symbol and unusual_pattern.search(symbol):
+                unusual_symbols.add(symbol)
+        print(f"Unusual symbols found: {unusual_symbols}")
+        # Assert API returns them without error
+        assert resp.status_code == 200
+        # If none found, pass but log
+        if not unusual_symbols:
+            print("No unusual symbols found in this dataset.")
+        # Clean up
+        await ac.delete(f"/api/v1/tastytrade/accounts/{account_id}", headers=headers)
 
 # --- Rate Limiting (Placeholder) ---
 @pytest.mark.asyncio
 async def test_tastytrade_rate_limiting():
-    """Test rate limiting by rapidly calling sync or data endpoints."""
-    # If not implemented, expect 200/202; if implemented, expect 429
-    # Placeholder: pass for now
-    pass
+    """Test rate limiting by rapidly calling sync endpoint multiple times."""
+    load_dotenv()
+    tasty_username = os.getenv("TASTYTRADE_USERNAME")
+    tasty_password = os.getenv("TASTY_PASSWORD")
+    if not tasty_username or not tasty_password:
+        pytest.skip("TastyTrade credentials not set in .env")
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        email = unique_email("ratelimit")
+        # Register user
+        resp = await ac.post("/api/v1/auth/register-user", json={
+            "email": email,
+            "password": "RateLimitTestPassword123!",
+            "role": "user"
+        })
+        assert resp.status_code == 201, resp.text
+        # Login
+        resp = await ac.post("/api/v1/auth/login", json={
+            "email": email,
+            "password": "RateLimitTestPassword123!"
+        })
+        assert resp.status_code == 200, resp.text
+        tokens = resp.json()
+        headers = {"Authorization": f"Bearer {tokens['access_token']}"}
+        # Add TastyTrade account
+        resp = await ac.post("/api/v1/tastytrade/accounts/", json={
+            "tasty_username": tasty_username,
+            "tasty_password": tasty_password
+        }, headers=headers)
+        assert resp.status_code == 201, resp.text
+        account_id = resp.json()["id"]
+        # Rapidly call sync endpoint 10 times
+        responses = []
+        for _ in range(10):
+            resp = await ac.post(f"/api/v1/tastytrade/accounts/sync/{account_id}", headers=headers)
+            responses.append(resp.status_code)
+        # Check for any 429 (rate limited)
+        if 429 in responses:
+            assert True, "Rate limiting enforced (429 received)"
+        else:
+            # If not rate limited, all should be 202/200
+            assert all(code in (200, 202) for code in responses), f"Unexpected status codes: {responses}"
+        # Clean up
+        await ac.delete(f"/api/v1/tastytrade/accounts/{account_id}", headers=headers)
 
 # --- Error Handling: Invalid Credentials ---
 @pytest.mark.asyncio

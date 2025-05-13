@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
 from datetime import datetime
 import uuid
@@ -16,8 +16,7 @@ class UserRead(UserBase):
     created_at: datetime
     last_login_at: Optional[datetime] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class UserInDB(UserRead):
     hashed_password: str

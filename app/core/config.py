@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from pydantic import EmailStr
+from pydantic import EmailStr, ConfigDict
 from pydantic import Field
 from typing import Optional
 
@@ -21,9 +21,7 @@ class Settings(BaseSettings):
     TASTYTRADE_USERNAME: Optional[str] = None
     TASTY_PASSWORD: Optional[str] = None
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = ConfigDict(env_file=".env", case_sensitive=True)
 
     @property
     def database_uri(self) -> str:

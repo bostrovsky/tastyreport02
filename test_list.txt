@@ -1,0 +1,13 @@
+app/tests/test_auth.py::test_register_and_login_and_me
+app/tests/test_clean_register_user.py::test_clean_register_user
+app/tests/test_minimal_register.py::test_minimal_register
+app/tests/test_tastytrade_account.py::test_tastytrade_account_crud
+app/tests/test_tastytrade_account.py::test_tastytrade_pagination_and_permissions
+app/tests/test_tastytrade_account.py::test_tastytrade_real_sync_and_data
+app/tests/test_tastytrade_account.py::test_tastytrade_empty_data
+app/tests/test_tastytrade_account.py::test_tastytrade_pagination
+app/tests/test_tastytrade_account.py::test_tastytrade_unusual_symbols
+app/tests/test_tastytrade_account.py::test_tastytrade_rate_limiting
+app/tests/test_tastytrade_account.py::test_tastytrade_invalid_credentials
+app/tests/test_tastytrade_account.py::test_tastytrade_api_downtime
+app/tests/test_tastytrade_account.py::test_tastytrade_cross_user_access
