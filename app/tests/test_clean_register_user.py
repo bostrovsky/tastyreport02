@@ -32,4 +32,4 @@ async def test_clean_register_user():
         })
         assert resp.status_code == 201, resp.text
         data = resp.json()
-        assert data["email"] == "cleanuser@example.com" 
+        assert data["email"] == "cleanuser@example.com"

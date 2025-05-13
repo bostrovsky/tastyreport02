@@ -25,4 +25,4 @@ async def test_minimal_register():
         })
         assert resp.status_code == 201, resp.text
         data = resp.json()
-        assert data["email"] == "minimal@example.com" 
+        assert data["email"] == "minimal@example.com"

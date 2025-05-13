@@ -111,7 +111,7 @@ class PortfolioMetricsService:
         position_data_last_updated = datetime.min
 
         if open_positions:
-            position_data_last_updated = max(p.last_updated_at for p in open_positions if p.last_updated_at) 
+            position_data_last_updated = max(p.last_updated_at for p in open_positions if p.last_updated_at)
                                            if any(p.last_updated_at for p in open_positions) else datetime.min
 
             for pos in open_positions:
@@ -128,10 +128,10 @@ class PortfolioMetricsService:
                     portfolio_theta += pos.theta * pos.quantity * (1 if pos.instrument_type != "OPTION" else multiplier)
                 if pos.vega is not None:
                     portfolio_vega += pos.vega * pos.quantity * (1 if pos.instrument_type != "OPTION" else multiplier)
-        
+
         # Determine overall last_updated_at based on the freshest data component
-        overall_last_updated = max(balance_last_updated, position_data_last_updated) 
-                                if balance_last_updated != datetime.min or position_data_last_updated != datetime.min 
+        overall_last_updated = max(balance_last_updated, position_data_last_updated)
+                                if balance_last_updated != datetime.min or position_data_last_updated != datetime.min
                                 else datetime.utcnow() # Fallback if no data
 
         return PortfolioMetricsSchema(
@@ -146,4 +146,3 @@ class PortfolioMetricsService:
         )
 ```
 **Important Note on Greeks:** The availability and quality of Greek values from the TastyTrade API are crucial. If they are not provided, or not reliably updated, implementing a custom Greek calculation engine is a very significant undertaking requiring an option pricing model (like Black-Scholes or Binomial) and real-time market data for all underlyings (price, volatility, interest rates). For MVP, relying on broker-provided Greeks is preferred. If unavailable, those specific metrics might be omitted or marked as N/A.
-

@@ -121,4 +121,3 @@ To provide a secure mechanism for users to register (if applicable, though likel
     *   Test automatic token refresh flow if applicable client-side.
 
 This comprehensive approach to user authentication will provide a secure and scalable foundation for the application.
-

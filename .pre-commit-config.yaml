@@ -1,0 +1,18 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: no-nonpy-alembic-versions
+        name: 'No non-Python files in alembic/versions/'
+        entry: bash -c 'ls alembic/versions | grep -v ".py$" && echo "Non-Python files found in alembic/versions/!" && exit 1 || exit 0'
+        language: system
+        types: [file]
+        always_run: true

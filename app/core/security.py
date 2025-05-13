@@ -44,4 +44,4 @@ def decode_refresh_token(token: str) -> Any:
         payload = jwt.decode(token, secret, algorithms=[settings.ALGORITHM])
         return payload
     except JWTError:
-        return None 
+        return None

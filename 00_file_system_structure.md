@@ -157,4 +157,3 @@ The frontend will be built using Next.js with the App Router.
 |-- postcss.config.js         # PostCSS configuration (for Tailwind CSS)
 |-- tailwind.config.js        # Tailwind CSS configuration
 ```
-

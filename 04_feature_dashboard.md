@@ -107,7 +107,7 @@ class DashboardService:
         db_account = await crud_tastytrade_account.get(self.db, id=tastytrade_db_account_id)
         if not db_account or db_account.user_id != user_id:
             raise HTTPException(status_code=404, detail="Account not found or not authorized")
-        
+
         account_number = db_account.account_number
 
         # Fetch P&L Data
@@ -116,7 +116,7 @@ class DashboardService:
         ytd_pnl = await self.pnl_service.get_ytd_pnl(account_number)
         overall_pnl = await self.pnl_service.get_overall_pnl(account_number)
         pnl_summary = PnlSummaryWidgetSchema(
-            daily_pnl=daily_pnl.total_pnl, 
+            daily_pnl=daily_pnl.total_pnl,
             mtd_pnl=mtd_pnl.total_pnl,
             ytd_pnl=ytd_pnl.total_pnl,
             overall_pnl=overall_pnl.total_pnl,
@@ -148,4 +148,3 @@ class DashboardService:
 
 ```
 The dashboard serves as the central hub for the user, so its clarity, accuracy, and performance are paramount to a good user experience.
-

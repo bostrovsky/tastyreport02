@@ -122,10 +122,9 @@ def check_for_vertical_spread(legs: List[Position]) -> Optional[str]:
             spread_type = "Long Put Vertical Spread (Debit)"
         else: # Short higher strike put
             spread_type = "Short Put Vertical Spread (Credit)"
-            
+
     return spread_type if spread_type else "Vertical Spread"
 
 # ... other rules for straddles, strangles, iron condors etc. ...
 ```
 This feature adds significant analytical value by allowing users to track performance and risk by strategy, moving beyond individual positions.
-

@@ -110,7 +110,7 @@ function ViewsLayout({ children, params }: { children: React.ReactNode, params: 
     <div>
       <nav> {/* Shadcn/ui Tabs component would go here */}
         {tabs.map(tab => (
-          <Link key={tab.href} href={tab.href} 
+          <Link key={tab.href} href={tab.href}
                 className={pathname === tab.href ? "font-bold" : ""}>
             {tab.name}
           </Link>
@@ -142,4 +142,3 @@ export default function UnderlyingPnlPage({ params }: { params: { accountId: str
 }
 ```
 These tabbed views will provide users with powerful tools to analyze their trading performance from various angles, contributing significantly to the application's value.
-

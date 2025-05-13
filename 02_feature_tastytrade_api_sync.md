@@ -124,14 +124,14 @@ async def sync_account_incremental_task(ctx, account_db_id: int):
 
         await update_sync_log(sync_log, status="RUNNING", details="Fetching new transactions...")
         new_transactions = await tasty_service.get_transactions(
-            account_number=tt_account.account_number, 
+            account_number=tt_account.account_number,
             start_date=tt_account.last_transaction_watermark
         )
         if new_transactions:
             await crud_transaction.create_transactions_batch(db, account_id=tt_account.id, transactions_data=new_transactions)
             new_watermark = get_latest_timestamp_from_transactions(new_transactions)
             await crud_tastytrade_account.update_watermark(db, tt_account, new_watermark)
-        
+
         await update_sync_log(sync_log, details="Fetching current positions...")
         current_positions = await tasty_service.get_positions(account_number=tt_account.account_number)
         await crud_position.upsert_positions_batch(db, account_id=tt_account.id, positions_data=current_positions)
@@ -152,4 +152,3 @@ async def sync_account_incremental_task(ctx, account_db_id: int):
         await db.close()
 ```
 This feature is foundational and complex, requiring careful attention to security, reliability, and data accuracy to build user trust and support the application's core functionality.
-

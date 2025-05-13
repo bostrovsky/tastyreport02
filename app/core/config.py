@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from pydantic import EmailStr
+from pydantic import Field
 from typing import Optional
 
 class Settings(BaseSettings):
@@ -15,7 +16,11 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
     SQLALCHEMY_DATABASE_URI: Optional[str] = None
-    
+    ENCRYPTION_KEY: str = Field(..., json_schema_extra={"env": "ENCRYPTION_KEY"})
+    # Allow test credentials for TastyTrade
+    TASTYTRADE_USERNAME: Optional[str] = None
+    TASTY_PASSWORD: Optional[str] = None
+
     class Config:
         env_file = ".env"
         case_sensitive = True
@@ -25,8 +30,8 @@ class Settings(BaseSettings):
         if self.SQLALCHEMY_DATABASE_URI:
             return self.SQLALCHEMY_DATABASE_URI
         return (
-            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}" 
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_SERVER}/{self.POSTGRES_DB}"
         )
 
-settings = Settings() 
+settings = Settings()

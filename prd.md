@@ -26,11 +26,11 @@
 - Frontend: Registration/login forms, AuthContext, protected routes
 - Stripe onboarding: Free trial logic, subscription status check
 
-**Risks:**  
+**Risks:**
 - **High**: Security (token leaks, brute-force, registration spam)
 - **Medium**: Stripe integration edge cases
 
-**Mitigation:**  
+**Mitigation:**
 - Use `passlib[argon2]`, `python-jose`, `slowapi` for rate limiting, email verification (SendGrid or similar, optional)
 - Stripe test mode, webhook validation, trial logic in backend
 
@@ -42,12 +42,12 @@
 
 **Estimate:** 6 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - Secure, frictionless registration/login/logout, trial logic, Stripe status reflected in UI
 
-**Testing:**  
-- Unit: password, JWT, endpoints  
-- Integration: registration, login, Stripe webhooks  
+**Testing:**
+- Unit: password, JWT, endpoints
+- Integration: registration, login, Stripe webhooks
 - E2E: registration, login, trial, subscribe, cancel
 
 ---
@@ -62,11 +62,11 @@
 - Manual sync trigger, sync status API
 - Marketstack.com integration for real-time quotes
 
-**Risks:**  
-- **High**: Tastytrade API changes, MFA, credential security, sync reliability  
+**Risks:**
+- **High**: Tastytrade API changes, MFA, credential security, sync reliability
 - **High**: Deduplication, data integrity
 
-**Mitigation:**  
+**Mitigation:**
 - Use your deduplication window logic, unique constraints, robust error handling, log all syncs
 - MFA: If required, prompt user for OTP, fallback to session token if possible
 
@@ -78,12 +78,12 @@
 
 **Estimate:** 10 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - Reliable sync, no data loss/duplication, user can see up-to-date trades/positions
 
-**Testing:**  
-- Unit: API wrappers, data transforms  
-- Integration: sync flows, error cases, deduplication  
+**Testing:**
+- Unit: API wrappers, data transforms
+- Integration: sync flows, error cases, deduplication
 - E2E: link account, trigger sync, view data
 
 ---
@@ -96,10 +96,10 @@
 - API endpoint for dashboard
 - Frontend widget for market indices
 
-**Risks:**  
+**Risks:**
 - **Medium**: API quota/rate limits, data staleness
 
-**Mitigation:**  
+**Mitigation:**
 - Use Redis cache, fallback to stale data, monitor API usage
 
 **Dependencies:** None
@@ -110,12 +110,12 @@
 
 **Estimate:** 3 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - Market data always available, up-to-date within 5 minutes, clear error states
 
-**Testing:**  
-- Unit: API parsing, cache logic  
-- Integration: background fetch, cache expiry  
+**Testing:**
+- Unit: API parsing, cache logic
+- Integration: background fetch, cache expiry
 - E2E: dashboard display
 
 ---
@@ -127,10 +127,10 @@
 - Frontend: Dashboard layout, widgets (P&L, metrics, market, account selector)
 - State management for dashboard data
 
-**Risks:**  
+**Risks:**
 - **Medium**: Data aggregation performance, stale data, UX complexity
 
-**Mitigation:**  
+**Mitigation:**
 - Optimize queries, cache aggregates, loading states in UI
 
 **Dependencies:** Auth, Data Sync, Market Data
@@ -141,12 +141,12 @@
 
 **Estimate:** 5 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - Loads in <2s, accurate data, responsive UI
 
-**Testing:**  
-- Unit: aggregation logic  
-- Integration: endpoint, data freshness  
+**Testing:**
+- Unit: aggregation logic
+- Integration: endpoint, data freshness
 - E2E: dashboard load, account switch
 
 ---
@@ -158,11 +158,11 @@
 - API endpoints for summary, by underlying, by trade
 - Frontend: P&L display components
 
-**Risks:**  
+**Risks:**
 - **High**: Calculation accuracy, edge cases (assignments, expirations)
 - **Medium**: Performance for large datasets
 
-**Mitigation:**  
+**Mitigation:**
 - Extensive test vectors, compare with broker, optimize queries
 
 **Dependencies:** Data Sync
@@ -173,12 +173,12 @@
 
 **Estimate:** 7 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - Matches broker P&L within 1%, handles all trade types
 
-**Testing:**  
-- Unit: calculation logic, edge cases  
-- Integration: API, large data  
+**Testing:**
+- Unit: calculation logic, edge cases
+- Integration: API, large data
 - E2E: user views P&L
 
 ---
@@ -190,10 +190,10 @@
 - API endpoint for metrics
 - Frontend: metrics widgets
 
-**Risks:**  
+**Risks:**
 - **Medium**: Greek calculation (if not provided), data freshness
 
-**Mitigation:**  
+**Mitigation:**
 - Use broker-provided Greeks for MVP, mark as N/A if missing
 
 **Dependencies:** Data Sync
@@ -204,12 +204,12 @@
 
 **Estimate:** 3 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - Metrics match broker, always up-to-date
 
-**Testing:**  
-- Unit: aggregation, fallback logic  
-- Integration: endpoint, data sync  
+**Testing:**
+- Unit: aggregation, fallback logic
+- Integration: endpoint, data sync
 - E2E: metrics display
 
 ---
@@ -222,11 +222,11 @@
 - API endpoints for strategies
 - Frontend: display strategy names, custom strategy UI
 
-**Risks:**  
+**Risks:**
 - **High**: Rule complexity, ambiguous cases, user confusion
 - **Medium**: Performance for large portfolios
 
-**Mitigation:**  
+**Mitigation:**
 - Start with simple, unambiguous strategies, allow user override, optimize grouping
 
 **Dependencies:** Data Sync, P&L
@@ -237,12 +237,12 @@
 
 **Estimate:** 7 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - 90%+ of common strategies auto-identified, user can tag custom
 
-**Testing:**  
-- Unit: rule engine, edge cases  
-- Integration: API, tagging  
+**Testing:**
+- Unit: rule engine, edge cases
+- Integration: API, tagging
 - E2E: user tags/edits strategies
 
 ---
@@ -253,10 +253,10 @@
 - Backend: Aggregation endpoints for each view
 - Frontend: Tabbed navigation, data tables, charts
 
-**Risks:**  
+**Risks:**
 - **Medium**: Query performance, data consistency, UI complexity
 
-**Mitigation:**  
+**Mitigation:**
 - Pre-aggregate where possible, paginate, loading states
 
 **Dependencies:** Data Sync, P&L, Strategy
@@ -267,12 +267,12 @@
 
 **Estimate:** 6 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - All views load in <2s, correct data, smooth navigation
 
-**Testing:**  
-- Unit: aggregation, filters  
-- Integration: endpoints, tab switching  
+**Testing:**
+- Unit: aggregation, filters
+- Integration: endpoints, tab switching
 - E2E: user explores all views
 
 ---
@@ -283,10 +283,10 @@
 - Backend: Net liquidity reconciliation logic, endpoint
 - Frontend: Reconciliation view
 
-**Risks:**  
+**Risks:**
 - **Medium**: Data completeness (historical net liq), edge cases
 
-**Mitigation:**  
+**Mitigation:**
 - Fallback to calculated values, clear error messages
 
 **Dependencies:** Data Sync, P&L
@@ -297,12 +297,12 @@
 
 **Estimate:** 3 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - Reconciliation matches broker, all components explained
 
-**Testing:**  
-- Unit: calculation, edge cases  
-- Integration: endpoint, data sync  
+**Testing:**
+- Unit: calculation, edge cases
+- Integration: endpoint, data sync
 - E2E: user views reconciliation
 
 ---
@@ -315,10 +315,10 @@
 - API endpoints for subscription status
 - Frontend: subscription UI, plan selection, trial/cancel logic
 
-**Risks:**  
+**Risks:**
 - **Medium**: Payment errors, access control
 
-**Mitigation:**  
+**Mitigation:**
 - Use Stripe hosted checkout, test webhooks, role-based access
 
 **Dependencies:** Auth
@@ -329,12 +329,12 @@
 
 **Estimate:** 4 days
 
-**Success Criteria:**  
+**Success Criteria:**
 - Users can subscribe, access is gated, payments processed
 
-**Testing:**  
-- Unit: webhook handling  
-- Integration: payment flow  
+**Testing:**
+- Unit: webhook handling
+- Integration: payment flow
 - E2E: subscribe, access features
 
 ---
@@ -396,22 +396,22 @@
 
 ## 7. Deployment Strategy
 
-- **Environments**: 
+- **Environments**:
   - **Local**: For dev, with mock/test data
   - **Staging**: Full stack, real APIs, test accounts, CI/CD deploy, feature flags
   - **Production**: Hardened, monitored, backups, alerting
 
-- **CI/CD**: 
+- **CI/CD**:
   - Lint, type-check, test, build, deploy (GitHub Actions, Vercel, etc.)
   - Automated rollback on failure
 
-- **Secrets Management**: 
+- **Secrets Management**:
   - Use environment variables, never commit secrets
 
-- **Monitoring**: 
+- **Monitoring**:
   - Error tracking (Sentry), performance (APM), background task health
 
-- **Data Backups**: 
+- **Data Backups**:
   - Nightly DB and Redis backups
 
 ---
@@ -454,7 +454,7 @@
    - CI/CD pipeline (GitHub Actions or similar)
    - Secrets management (dotenv, Vercel/Netlify secrets, etc.)
 
-3. **Smoke test:** 
+3. **Smoke test:**
    - Run FastAPI and Next.js locally, connect to DB, run a test background task, fetch market data
 
 ---
@@ -478,10 +478,10 @@
 
 ---
 
-**Next Steps:**  
+**Next Steps:**
 - Confirm access to all required APIs and services.
 - Set up local and staging environments.
 - Begin with user registration/auth, Stripe onboarding, and Tastytrade account linking.
 - Prioritize early delivery of dashboard with real data to validate core value.
 
-If you need detailed Tastytrade API integration instructions or code samples, I can provide a summary and best practices based on the latest public documentation and your `sync.py` approach. Let me know if you want this as a next step. 
+If you need detailed Tastytrade API integration instructions or code samples, I can provide a summary and best practices based on the latest public documentation and your `sync.py` approach. Let me know if you want this as a next step.

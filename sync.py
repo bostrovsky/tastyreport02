@@ -17,19 +17,19 @@ console = Console()
 
 class TransactionSync:
     """Handles synchronization of Tastytrade transactions to Supabase."""
-    
+
     def __init__(self) -> None:
         """Initialize the sync handler."""
         self.session: Optional[Session] = None
         self.postgrest: Optional[AsyncPostgrestClient] = None
         self.config = Config()
-        
+
     async def connect(self) -> None:
         """Connect to both Tastytrade and Supabase."""
         if not self.config.is_valid:
             console.print("[red]Error:[/red] Missing required configuration.")
             sys.exit(1)
-            
+
         # Connect to Tastytrade
         with Progress(
             SpinnerColumn(),
@@ -42,7 +42,7 @@ class TransactionSync:
                 self.config.tasty_password,
                 remember_me=True
             )
-            
+
         # Connect to Supabase via Postgrest
         self.postgrest = AsyncPostgrestClient(
             base_url=f"{self.config.supabase_url}/rest/v1",
@@ -51,7 +51,7 @@ class TransactionSync:
                 "Authorization": f"Bearer {self.config.supabase_key}"
             }
         )
-            
+
     async def get_last_sync_time(self, account_number: str) -> Optional[datetime]:
         """Get the timestamp of the last synced transaction for an account."""
         result = await self.postgrest.from_("transactions") \
@@ -60,28 +60,28 @@ class TransactionSync:
             .order("executed_at", desc=True) \
             .limit(1) \
             .execute()
-            
+
         if result.data and result.data[0]:
             return datetime.fromisoformat(result.data[0]["executed_at"])
         return None
-        
+
     async def sync_transactions(self) -> None:
         """Synchronize transactions from Tastytrade to Supabase."""
         if not self.session or not self.postgrest:
             console.print("[red]Error:[/red] Not connected to services.")
             return
-            
+
         # Fetch accounts using the correct async method
         accounts = await Account.a_get(self.session)
-        
+
         for account in accounts:
             console.print(f"\nSyncing transactions for account {account.account_number}...")
-            
+
             # Get last sync time
             last_sync = await self.get_last_sync_time(account.account_number)
             if last_sync:
                 console.print(f"Last sync: {last_sync.isoformat()}")
-            
+
             # Fetch transactions using the correct async method
             with Progress(
                 SpinnerColumn(),
@@ -92,17 +92,17 @@ class TransactionSync:
                 transactions = await account.a_get_history(self.session)
                 # No last_sync filter; rely on deduplication
                 progress.update(task, completed=True)
-            
+
             if not transactions:
                 console.print("No new transactions found.")
                 continue
-                
+
             console.print(f"Found {len(transactions)} new transactions.")
             if transactions:
                 first_txn = transactions[0]
                 print("Sample transaction attributes:", dir(first_txn))
                 print("Sample transaction as dict:", getattr(first_txn, '__dict__', str(first_txn)))
-            
+
             # 1. Get the latest executed_at date for this account
             result = await self.postgrest.from_("transactions") \
                 .select("executed_at") \
@@ -189,4 +189,4 @@ async def main() -> None:
 
 if __name__ == "__main__":
     import asyncio
-    asyncio.run(main()) 
+    asyncio.run(main())

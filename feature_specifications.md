@@ -93,18 +93,18 @@ def is_vertical_call_spread(legs: List[PositionLegSchema]) -> bool:
     leg1, leg2 = sorted(legs, key=lambda x: x.strike_price) # Sort by strike
 
     # Check common underlying, expiration, both calls
-    if not (leg1.underlying == leg2.underlying and 
-            leg1.expiration == leg2.expiration and 
+    if not (leg1.underlying == leg2.underlying and
+            leg1.expiration == leg2.expiration and
             leg1.option_type == "CALL" and leg2.option_type == "CALL"):
         return False
 
     # Check one long, one short, same quantity (absolute)
-    if not ((leg1.action_type == "LONG" and leg2.action_type == "SHORT") or 
+    if not ((leg1.action_type == "LONG" and leg2.action_type == "SHORT") or
             (leg1.action_type == "SHORT" and leg2.action_type == "LONG")):
         return False
     if abs(leg1.quantity) != abs(leg2.quantity):
         return False
-        
+
     # Leg1 has lower strike, Leg2 has higher strike
     # Long Call Spread: Long lower_strike_call, Short higher_strike_call (Debit)
     # Short Call Spread: Short lower_strike_call, Long higher_strike_call (Credit)
@@ -127,7 +127,7 @@ async def identify_strategy_for_position_group(self, position_legs: List[Positio
     # elif is_iron_condor(position_legs): # More complex check for 4 legs
     #     return "Iron Condor"
     # ... other strategy checks (straddle, strangle, put spreads, etc.)
-    
+
     if len(position_legs) == 1 and position_legs[0].option_type: # Re-check for single after group checks
         return f"Single {position_legs[0].action_type} {position_legs[0].option_type}"
     elif len(position_legs) == 1 and not position_legs[0].option_type: # Stock position
@@ -207,5 +207,5 @@ To provide users with multiple, distinct perspectives on their trading activity,
             *   Fetch trades/positions for the period.
             *   Aggregate P&L (realized and unrealized) grouped by `underlying_symbol`.
         *   `async def get_strategy_view_data(db: Session, user_id: int, period_spec: PeriodSpec) -> List[PnlByStrategyViewSchema]:`
-            *   
+            *
 (Content truncated due to size limit. Use line ranges to read in chunks)

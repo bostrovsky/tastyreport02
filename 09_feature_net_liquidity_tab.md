@@ -30,4 +30,4 @@ To provide users with a clear and transparent reconciliation of their account's 
     *   **Starting/Ending Net Liquidity (Broker Reported):** These figures should be based on TastyTrade's reported net liquidity at the start/end of the period. This requires fetching historical account balance snapshots (from Feature 2 sync, if available from TastyTrade API) or calculating based on the earliest available NL and rolling forward.
     *   **Realized P&L, Fees, Commissions:** Derived from the application's transaction data (synced from TastyTrade).
     *   **Cash Deposits/Withdrawals:** Identified from specific transaction types from TastyTrade (e.g., `MONEY_MOVEMENT` type).
-    *   The reconciliation aims to explain the *change* in net liquidity. The 
+    *   The reconciliation aims to explain the *change* in net liquidity. The

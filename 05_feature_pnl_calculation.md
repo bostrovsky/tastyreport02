@@ -106,18 +106,18 @@ async def calculate_option_trade_pnl(opening_transaction: Transaction, closing_t
 
     # Cost for opening leg
     open_cost_per_contract = opening_transaction.price_per_unit
-    open_total_cost = (open_cost_per_contract * opening_transaction.quantity * opening_transaction.multiplier) + 
+    open_total_cost = (open_cost_per_contract * opening_transaction.quantity * opening_transaction.multiplier) +
                         opening_transaction.commission + opening_transaction.fees
     if opening_transaction.action_type.startswith("SELL"): # Credit spread, sold to open
         open_total_cost = -open_total_cost # Represents cash inflow
 
     # Proceeds from closing leg
     close_proceeds_per_contract = closing_transaction.price_per_unit
-    close_total_proceeds = (close_proceeds_per_contract * closing_transaction.quantity * closing_transaction.multiplier) - 
+    close_total_proceeds = (close_proceeds_per_contract * closing_transaction.quantity * closing_transaction.multiplier) -
                              closing_transaction.commission - closing_transaction.fees
     if closing_transaction.action_type.startswith("BUY"): # Debit spread, bought to close
         close_total_proceeds = -close_total_proceeds # Represents cash outflow
-    
+
     # P&L Calculation
     # If sold to open (credit), P&L = Initial Credit - Cost to Close (if any)
     # If bought to open (debit), P&L = Proceeds from Close - Initial Debit
@@ -128,23 +128,23 @@ async def calculate_option_trade_pnl(opening_transaction: Transaction, closing_t
     # Simplified: if we treat costs as positive and proceeds as positive
     # and then adjust based on overall direction. Or, always: Sum of all cash flows related to the trade.
     # Let's use a cash flow approach: positive for inflow, negative for outflow.
-    
+
     cash_flow_open = 0
     if opening_transaction.action_type.startswith("SELL"): # Sell to Open (credit)
-        cash_flow_open = (opening_transaction.price_per_unit * opening_transaction.quantity * opening_transaction.multiplier) - 
+        cash_flow_open = (opening_transaction.price_per_unit * opening_transaction.quantity * opening_transaction.multiplier) -
                            opening_transaction.commission - opening_transaction.fees
     elif opening_transaction.action_type.startswith("BUY"): # Buy to Open (debit)
-        cash_flow_open = -((opening_transaction.price_per_unit * opening_transaction.quantity * opening_transaction.multiplier) + 
+        cash_flow_open = -((opening_transaction.price_per_unit * opening_transaction.quantity * opening_transaction.multiplier) +
                             opening_transaction.commission + opening_transaction.fees)
 
     cash_flow_close = 0
     if closing_transaction.action_type.startswith("SELL"): # Sell to Close (credit)
-        cash_flow_close = (closing_transaction.price_per_unit * closing_transaction.quantity * closing_transaction.multiplier) - 
+        cash_flow_close = (closing_transaction.price_per_unit * closing_transaction.quantity * closing_transaction.multiplier) -
                             closing_transaction.commission - closing_transaction.fees
     elif closing_transaction.action_type.startswith("BUY"): # Buy to Close (debit)
-        cash_flow_close = -((closing_transaction.price_per_unit * closing_transaction.quantity * closing_transaction.multiplier) + 
+        cash_flow_close = -((closing_transaction.price_per_unit * closing_transaction.quantity * closing_transaction.multiplier) +
                              closing_transaction.commission + closing_transaction.fees)
-    
+
     realized_pnl = cash_flow_open + cash_flow_close
     return realized_pnl
 ```
@@ -154,4 +154,3 @@ async def calculate_option_trade_pnl(opening_transaction: Transaction, closing_t
 *   **Currency:** Assume all calculations are in USD unless multi-currency support is a requirement.
 
 Accurate P&L reporting is a cornerstone of a trading analytics application. Rigorous testing and clear methodology are essential.
-

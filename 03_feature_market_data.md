@@ -89,7 +89,7 @@ To provide users with a general overview of current market conditions by display
 async def fetch_and_cache_external_market_data():
     # Assume settings.MARKET_INDEX_SYMBOLS_MAP = {"^GSPC": "S&P 500", ...}
     # Assume settings.EXTERNAL_MARKET_DATA_API_PROVIDER = "finnhub" (example)
-    
+
     fetched_indices_data = []
     api_key = settings.EXTERNAL_MARKET_DATA_API_KEY
     base_url = settings.EXTERNAL_MARKET_DATA_API_BASE_URL # e.g., "https://finnhub.io/api/v1"
@@ -101,7 +101,7 @@ async def fetch_and_cache_external_market_data():
                 # response = await client.get(f"{base_url}/quote?symbol={symbol}&token={api_key}")
                 # response.raise_for_status()
                 # quote_data = response.json() # c: current, d: change, dp: percent_change, t: timestamp
-                
+
                 # MOCKING API RESPONSE FOR EXAMPLE
                 quote_data = {
                     "c": random.uniform(3000, 15000),
@@ -133,4 +133,3 @@ async def fetch_and_cache_external_market_data():
         # Log: "No market data fetched, cache not updated."
 ```
 This feature provides crucial context to users about the overall market environment, enhancing their decision-making process when viewing their portfolio.
-

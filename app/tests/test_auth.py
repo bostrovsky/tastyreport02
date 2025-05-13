@@ -15,7 +15,7 @@ async def test_register_and_login_and_me():
     async with async_session_maker() as session:
         await session.execute(text("DELETE FROM users"))
         await session.commit()
-    
+
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         # Register
@@ -71,4 +71,4 @@ async def test_register_and_login_and_me():
 
         # Logout (no-op)
         resp8 = await ac.post("/api/v1/auth/logout")
-        assert resp8.status_code == 204 
+        assert resp8.status_code == 204

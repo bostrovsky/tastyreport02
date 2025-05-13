@@ -11,7 +11,7 @@ httpx
 python-dotenv
 pytest
 rich
-pydantic-settings 
+pydantic-settings
 asyncpg
 email-validator
 pytest-asyncio

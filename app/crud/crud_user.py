@@ -4,7 +4,7 @@ from sqlalchemy import update
 from app.db.models.user import User
 from app.schemas.user import UserCreate
 from app.core.security import get_password_hash
-from datetime import datetime
+from datetime import datetime, timezone
 
 async def get_user_by_email(db: AsyncSession, email: str) -> User | None:
     result = await db.execute(select(User).where(User.email == email))
@@ -24,8 +24,8 @@ async def create_user(db: AsyncSession, user_in: UserCreate) -> User:
     return db_user
 
 async def update_user_last_login(db: AsyncSession, user: User) -> User:
-    user.last_login_at = datetime.utcnow()
+    user.last_login_at = datetime.now(timezone.utc)
     db.add(user)
     await db.commit()
     await db.refresh(user)
-    return user 
+    return user

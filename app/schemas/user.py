@@ -20,4 +20,4 @@ class UserRead(UserBase):
         orm_mode = True
 
 class UserInDB(UserRead):
-    hashed_password: str 
+    hashed_password: str

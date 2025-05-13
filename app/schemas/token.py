@@ -13,4 +13,4 @@ class TokenPayload(BaseModel):
     role: Optional[str] = None
 
 class RefreshToken(BaseModel):
-    refresh_token: str 
+    refresh_token: str

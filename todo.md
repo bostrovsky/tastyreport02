@@ -93,4 +93,3 @@
 - [ ] **7. Final Output Preparation**
     - [ ] Ensure no actual code is written, only pseudocode where necessary for technical illustration.
     - [ ] Prepare the final `feature_specifications.md` for delivery.
-
