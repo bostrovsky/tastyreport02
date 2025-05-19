@@ -2,6 +2,10 @@ from pydantic_settings import BaseSettings
 from pydantic import EmailStr, ConfigDict
 from pydantic import Field
 from typing import Optional
+from pathlib import Path
+
+# Get the project root directory (2 levels up from this file)
+PROJECT_ROOT = Path(__file__).parent.parent.parent
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
@@ -21,7 +25,11 @@ class Settings(BaseSettings):
     TASTYTRADE_USERNAME: Optional[str] = None
     TASTY_PASSWORD: Optional[str] = None
 
-    model_config = ConfigDict(env_file=".env", case_sensitive=True)
+    model_config = ConfigDict(
+        env_file=str(PROJECT_ROOT / ".env"),
+        env_file_encoding="utf-8",
+        case_sensitive=True
+    )
 
     @property
     def database_uri(self) -> str:
